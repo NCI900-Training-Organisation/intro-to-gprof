@@ -2,10 +2,14 @@ Modules
 =======
 
 .. note::
- 1.  python3/3.11.0
- 2.  papi/7.0.1
- 3.  openmpi/4.0.1
- 4.  cuda/12.3.2
+    
+    #. gcc/10.3.0
+    #. openmpi/4.1.7
+    #. cuda/12.9.0
+    #. papi/7.1.0
+    #. intel-mkl/2024.2.1
+    #. intel-vtune/2024.2.1
+    #. cmake/3.8.2
 
 Modules are how we manage software in most HPC machines. We can see all the available modules using the command
 

@@ -1,7 +1,7 @@
 Tutorial
 ========
 
-Describe the tutorial here.
+This tutorial provides a beginner-friendly introduction to using gprof for profiling C/C++ programs.
 
 .. list-table::   
   :widths: 20 20 20 20
@@ -11,36 +11,17 @@ Describe the tutorial here.
     - Material
     - Exercises
     - Duration
-  * - Requesting a Job
+  * - Setup the Application
     - 10 minutes
-    - 10 minutes
     - 20 minutes
-  * - High-level HPC Architecture
-    - 20 minutes
-    - 15 minutes
-    - 35 minutes
-  * - Basic of Parallelism
-    - 20 minutes
-    - 15 minutes
-    - 35 minutes
-  * - Vector Parallelism
-    - 20 minutes
-    - 10 minutes
     - 30 minutes
-  * - Multi-core Parallelism
-    - 20 minutes
+  * - GProf
     - 10 minutes
-    - 30 minutes
-  * - GPU Parallelism
-    - 30 minutes
-    - 15 minutes
-    - 45 minutes
-  * - Multi-node Parallelism
     - 20 minutes
-    - 15 minutes
-    - 35 minutes
+    - 30 minutes
 
 
 .. toctree::
 
     tutorial/intro.rst
+    tutorial/gprof.rst

@@ -1,108 +1,57 @@
-Heading level 2 (Section)
+Setup the Application
 ==========================
 
 .. admonition:: Overview
    :class: Overview
 
-    * **Tutorial:** 10 min
+    * **Tutorial:** 30 min
 
         **Objectives:**
-            #. Learn the how Numba works.
+            #. Setup the application to be profiled.
 
 
+The application we are going to use LULESH (Livermore Unstructured Lagrangian Explicit Shock 
+Hydrodynamics). It is a proxy application that implements a Lagrangian hydrodynamics model for 
+simulating shock wave propagation in materials. The code is written in C++ and is parallelized 
+using MPI (Message Passing Interface) for distributed memory systems.
 
-
-Heading level 2 (Section)
-==========================
-
-Heading level 3 (Subsection)
+Build the LULESH application
 ----------------------------
 
-Heading level 4 (Sub-subsection)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Heading level 5 (Paragraph)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Heading level 6 (Subparagraph)
-+++++++++++++++++++++++++++++++
-
-Heading level 7 (Lowest level)
-
-
-Add Imgaes
------------------
-
-.. image:: ../figs/performance.png
-
-
-Bullets
----------------------------
-
- 
-1. **Annotation and Compilation**: When you use Numba's `@jit` decorator on a Python function, Numba 
-first analyzes the function's code. This analysis determines how to compile the function to improve performance. 
-You can also provide type hints to help Numba generate more efficient machine code.
-
-2. **Type Inference**: Numba performs type inference on the function’s inputs and outputs. It determines the 
-types of variables and ensures that operations are optimized for those types. For example, it might optimize
-arithmetic operations for specific numerical types.
-
-3. **Machine Code Generation**: Based on the type information and analysis, Numba generates machine code 
-tailored to the function. This code is designed to run directly on the hardware, bypassing the overhead of the 
-Python interpreter.
-
-Code Blocks
---------------
-
-..  code-block:: python
+..  code-block:: bash
     :linenos:
 
-    import numba
-    from numba import jit, int32, prange, vectorize, float64, cuda
+    cd /scratch/vp91/$USER
+    git clone https://github.com/LLNL/LULESH.git
+
+    cd /scratch/vp91/$USER/intro-to-gprof/build_scripts
+    ./build_lulesh.sh /scratch/vp91/$USER/LULESH
+
+Test the LULESH application
+----------------------------
+
+..  code-block:: bash
+    :linenos:
+
+    qsub -I -q normal -P vp91 -l walltime=02:00:00 -l ncpus=48 -l mem=192GB -l wd
+
+..  code-block:: bash
+    :linenos:
+
+    cd /scratch/vp91/$USER/LULESH/build
+    ./lulesh2.0 -s 20
 
 
-Notes
---------------
-
-.. note::
- 1.  python3/3.11.0
- 2.  papi/7.0.1
- 3.  openmpi/4.0.1
- 4.  cuda/12.3.2
- 5.  gcc/14.2.0
-
-Explanations
----------------
-
-.. admonition:: Explanation
-   :class: attention
-   
-    #. Numba is a JIT compiler that optimizes Python code for performance.
-    #. It compiles functions at runtime, allowing for efficient execution of numerical computations.
-    #. The `@jit` decorator is used to mark functions for optimization.
-    #. Numba can handle different input types and adapt its compilation accordingly.
-
-
-Importance
----------------
-
-.. important::
-   In practice weight updates do not happen after  every individual sample; instead, they occur after each batch of data, depending on the **batch size** used. 
-
-Exercise
----------------
-
-.. admonition:: Exercise
-   :class: todo
-
-    1. Examine the program *src/distributed_data_parallel.py*. What the changes from data_parallel.ipynb?
-    2. Examine the job script *job_scripts/distributed_data_parallel.pbs*.
-    3. Run the program using the job script *job_scripts/distributed_data_parallel.pbs*.
 
 
 
 .. admonition:: Key Points
    :class: hint
+   
+    #. LULESH is a proxy application for simulating shock wave propagation in materials.
+    #. It is written in C++ and parallelized using MPI.
+    #. The application can be built and tested on a high-performance computing cluster.
+    
 
-    #. Numba uses simple annonations to parallelise code.
+
+
