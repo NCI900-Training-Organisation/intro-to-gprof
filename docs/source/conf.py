@@ -2,7 +2,7 @@
 
 # -- Project information
 
-project = "Introduction to GProf"
+project = "Introduction to Profiling Tools"
 copyright = "2024, National Computational Infrastructure"
 author = "Joseph John"
 

@@ -51,6 +51,11 @@ This will create a file named ``profile.txt`` containing the profiling results, 
 viewed using any text editor or command-line tools like ``less`` or ``cat``.
 
 
+Flat Profile
+----------------
+
+The flat profile section of the gprof output provides a summary of the time spent in each function.
+
 GProf columns in the output file:
 
 1. **% time**
@@ -96,6 +101,51 @@ GProf columns in the output file:
     * Example: If the function is named foo(), then name = foo().
 
 
+Call Graph
+----------------
+
+The call graph section of the gprof output provides a detailed view of function calls and their 
+relationships.
+
+1. **index**
+
+    * A unique identifier for each function in the call graph.
+
+    * Example: If foo() is the first function listed, it might have index = 1.
+
+2. **% time**
+    * The percentage of the total program runtime that was spent inside this function (not including functions it calls).
+
+    * Example: If your program ran for 10 seconds total and foo() spent 4 seconds in its own code, then % time = 40%.
+
+3. **self**
+
+    * The total time spent in this function alone, excluding time spent in functions it calls.
+
+    * Example: If foo() took 4 seconds and called bar() which took 3 seconds, then self seconds = 4 seconds.
+
+
+4. **children**
+
+    * The total time spent in functions called by this function.
+
+    * Example: If foo() called bar() which took 3 seconds, then children = 3 seconds.
+
+5. **called**
+
+    * The number of times this function was called during the program's execution.
+
+    * Example: If foo() was called 5 times, then calls = 5.
+
+    * Sometimes total calls and the number of calls made by the parent function are shown separately.
+
+6. **name**
+
+    * The name of the function being profiled.
+
+    * Example: If the function is named foo(), then name = foo().
+
+
 
 
 
@@ -107,6 +157,8 @@ GProf columns in the output file:
     #. To use GProf with a C++ application, compile the code with the `-pg` flag.
     #. Run the application to generate a `gmon.out` file.
     #. Analyze the data using the `gprof` command.
+    #. Flat Profile section summarizes time spent in each function.
+    #. Call Graph section provides a detailed view of function calls and their relationships.
     
 
 

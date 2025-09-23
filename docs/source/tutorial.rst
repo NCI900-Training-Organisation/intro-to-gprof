@@ -1,7 +1,8 @@
 Tutorial
 ========
 
-This tutorial provides a beginner-friendly introduction to using gprof for profiling C/C++ programs.
+This tutorial provides a beginner-friendly introduction to using difffent profiling tools for 
+C/C++ programs.
 
 .. list-table::   
   :widths: 20 20 20 20

@@ -1,7 +1,8 @@
-Introduction to GProf
+Introduction to Profiling Tools
 =================================================
 
-This repository provides a beginner-friendly introduction to using gprof for profiling C/C++ programs
+This repository provides a beginner-friendly introduction to using difffent tools for 
+profiling C/C++ programs
 
 .. note::
 
