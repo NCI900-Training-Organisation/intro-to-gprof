@@ -53,43 +53,43 @@ viewed using any text editor or command-line tools like ``less`` or ``cat``.
 
 GProf columns in the output file:
 
-1. % time
+1. **% time**
 
     * The percentage of the total program runtime that was spent inside this function (not including functions it calls).
 
     * Example: If your program ran for 10 seconds total and foo() spent 4 seconds in its own code, then % time = 40%.
 
-2. cumulative seconds
+2. **cumulative seconds**
 
     * The total time spent in this function and all functions it calls, up to and including this function.
 
     * Example: If foo() called bar() which took 3 seconds, and foo() itself took 4 seconds, then cumulative seconds = 7 seconds.
 
-3. self seconds
+3. **self seconds**
 
     * The total time spent in this function alone, excluding time spent in functions it calls.
 
     * Example: If foo() took 4 seconds and called bar() which took 3 seconds, then self seconds = 4 seconds.
 
-4. calls
+4. **calls**
 
     * The number of times this function was called during the program's execution.
 
     * Example: If foo() was called 5 times, then calls = 5.
 
-5. self s/call
+5. **self s/call**
 
     * The average time spent in this function per call, calculated as self seconds divided by calls.
 
     * Example: If foo() took 4 seconds and was called 5 times, then self ms/call = 800 ms/call.
 
-6. total s/call
+6. **total s/call**
 
     * The average time spent in this function and all functions it calls per call, calculated as cumulative seconds divided by calls.
 
     * Example: If foo() took 7 seconds (including calls to bar()) and was called 5 times, then total s/call = 1400 ms/call.
 
-7. name
+7. **name**
 
     * The name of the function being profiled.
 
