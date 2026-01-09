@@ -24,7 +24,6 @@ module load papi/7.1.0
 module load intel-mkl/2024.2.1
 module load intel-vtune/2024.2.1
 module load cmake/3.8.2
-module load ninja
 
 # -------------------------------
 # 2. Set compilers to MPI wrappers

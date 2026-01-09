@@ -10,142 +10,163 @@ Intel VTune
             #. Understand the basics of Intel Vtune and how to use it for profiling applications.
 
 
-GProf (GNU Profiler) is a performance analysis tool for Unix-like operating systems. 
-It helps developers identify which parts of their code are consuming the most execution time, 
-allowing them to optimize performance-critical sections. GProf works by collecting and analyzing 
-data about function calls and execution times during the program's runtime.
+Intel VTune Profiler is a performance analysis tool that helps developers identify performance bottlenecks in their applications.
+It provides insights into CPU usage, threading performance, memory access patterns, and more.   
 
-
-The cmake command used is
+First compile the code with the appropriate flags to enable profiling.
+The cmake command used is:
 
 ..  code-block:: bash
     :linenos:
 
     cmake -G Ninja \
-        -DCMAKE_BUILD_TYPE=Debug \
+        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
         -DMPI_CXX_COMPILER="$(which mpicxx)" \
         -DWITH_MPI=On \
         -DWITH_OPENMP=On \
         -DCMAKE_INSTALL_PREFIX="$INSTALLDIR" \
-        -DCMAKE_CXX_FLAGS="-pg" \
+        -DCMAKE_CXX_FLAGS="-g -O3 -fno-omit-frame-pointer" \
         "$SRCDIR"
 
-where ``-DCMAKE_CXX_FLAGS="-pg"`` is used to enable profiling with gprof. 
+where ``-DCMAKE_CXX_FLAGS="-g -O3 -fno-omit-frame-pointer" `` is used to enable profiling with gprof. 
 
-To run the application with gprof enabled, use the following command:   
+
+HotsPot Analysis
+-------------------
+
+HotsPot analysis helps identify the most time-consuming functions in your application.
+
+
 
 ..  code-block:: bash
     :linenos:
 
-    ./lulesh2.0 -s 20
+    ./vtune -collect hotspots -result-dir vtune_hotspots mpirun -np 4 ./lulesh2.0 -s 20
 
-This will generate a file named ``gmon.out`` in the current directory after the program completes.
+This will generate a directory named ``vtune_hotspots`` in the current directory after the program completes.
 To analyze the profiling data, use the following command:   
 
 ..  code-block:: bash
     :linenos:
 
-    gprof ./lulesh2.0 gmon.out > profile.txt
+    vtune -report summary -result-dir vtune_hotspots
 
-This will create a file named ``profile.txt`` containing the profiling results, which can be
-viewed using any text editor or command-line tools like ``less`` or ``cat``.
-
-
-Flat Profile
-----------------
-
-The flat profile section of the gprof output provides a summary of the time spent in each function.
-
-GProf columns in the output file:
-
-1. **% time**
-
-    * The percentage of the total program runtime that was spent inside this function (not including functions it calls).
-
-    * Example: If your program ran for 10 seconds total and foo() spent 4 seconds in its own code, then % time = 40%.
-
-2. **cumulative seconds**
-
-    * The total time spent in this function and all functions it calls, up to and including this function.
-
-    * Example: If foo() called bar() which took 3 seconds, and foo() itself took 4 seconds, then cumulative seconds = 7 seconds.
-
-3. **self seconds**
-
-    * The total time spent in this function alone, excluding time spent in functions it calls.
-
-    * Example: If foo() took 4 seconds and called bar() which took 3 seconds, then self seconds = 4 seconds.
-
-4. **calls**
-
-    * The number of times this function was called during the program's execution.
-
-    * Example: If foo() was called 5 times, then calls = 5.
-
-5. **self s/call**
-
-    * The average time spent in this function per call, calculated as self seconds divided by calls.
-
-    * Example: If foo() took 4 seconds and was called 5 times, then self ms/call = 800 ms/call.
-
-6. **total s/call**
-
-    * The average time spent in this function and all functions it calls per call, calculated as cumulative seconds divided by calls.
-
-    * Example: If foo() took 7 seconds (including calls to bar()) and was called 5 times, then total s/call = 1400 ms/call.
-
-7. **name**
-
-    * The name of the function being profiled.
-
-    * Example: If the function is named foo(), then name = foo().
+This will display a summary of the profiling results, including the most time-consuming functions and 
+their respective CPU usage.
 
 
-Call Graph
-----------------
+1. **CPU Time**:
 
-The call graph section of the gprof output provides a detailed view of function calls and their 
-relationships.
+    * Total time all threads spent on-CPU (executing instructions, even if just spinning).
+    
+    * This is not wall-clock runtime, it’s aggregated across threads.
 
-1. **index**
+2. **Effective Time**:
 
-    * A unique identifier for each function in the call graph.
+    * Time actually doing useful work (retired instructions, arithmetic, etc.).
 
-    * Example: If foo() is the first function listed, it might have index = 1.
+    * The closer this is to CPU Time, the better.
 
-2. **% time**
-    * The percentage of the total program runtime that was spent inside this function (not including functions it calls).
+3. **Spin Time:**
 
-    * Example: If your program ran for 10 seconds total and foo() spent 4 seconds in its own code, then % time = 40%.
+    * Time threads spent actively waiting (busy-waiting) rather than progressing.
 
-3. **self**
+    * Common causes in HPC apps like LULESH:
+        - OpenMP threads waiting at barriers
 
-    * The total time spent in this function alone, excluding time spent in functions it calls.
+        - MPI processes spinning in synchronization calls
 
-    * Example: If foo() took 4 seconds and called bar() which took 3 seconds, then self seconds = 4 seconds.
+        - Locks/spinlocks in runtime libraries
 
-
-4. **children**
-
-    * The total time spent in functions called by this function.
-
-    * Example: If foo() called bar() which took 3 seconds, then children = 3 seconds.
-
-5. **called**
-
-    * The number of times this function was called during the program's execution.
-
-    * Example: If foo() was called 5 times, then calls = 5.
-
-    * Sometimes total calls and the number of calls made by the parent function are shown separately.
-
-6. **name**
-
-    * The name of the function being profiled.
-
-    * Example: If the function is named foo(), then name = foo().
+    * VTune is hinting that ~11% of CPU time was wasted in spin-wait.
 
 
+
+4. **Overhead Time:**
+
+    * Time in the runtime system itself (thread scheduling, task bookkeeping, OpenMP runtime).
+
+    * Zero here means runtime overhead was negligible.
+
+5. **Total Thread Count:**
+
+    * Number of software threads seen during execution.
+
+    * On an MPI + OpenMP run, this equals:
+
+        - MPI ranks × OpenMP threads per rank
+        - Or possibly extra threads from the runtime.
+
+
+6. **Paused Time:** 
+
+    * Time threads were deliberately suspended or descheduled (not runnable).
+
+    * None here → all waiting was spin-based, not due to OS sleeping.
+
+
+7. **Top Hotspots Function:**
+
+    * The function consuming the most CPU time.
+
+8. **Effective Physical Core Utilization:** 
+
+    * 48 = the number of physical cores on your node (VTune detected this from the hardware).
+
+    * 1.630 = the average number of physical cores doing useful work at any given time.
+
+    * 3.4% = (1.630 ÷ 48) × 100 → basically says:
+        - Out of 48 cores available, on average only ~3.4% were actually contributing useful computation.
+        - This is a sign of poor parallel efficiency, likely due to load imbalance, excessive synchronization, or insufficient parallelism.
+
+9. **Effective Logical Core Utilization:** 
+
+    * 96 = total number of logical cores on your system.
+    * Your machine has 48 physical cores with Hyper-Threading (SMT) → 2 logical per physical = 96.
+    * 1.651 = the average number of logical cores that were effectively doing useful work.
+    * 1.7% = (1.651 ÷ 96) × 100.
+    * So on average, only ~1.6 logical cores were active out of 96 possible.
+
+
+HPC Performance
+--------------------
+
+``hpc-performance`` gives a much more detailed view of parallel performance, especially for MPI + OpenMP codes like LULESH.
+
+To run the HPC performance analysis, use the following command:
+
+..  code-block:: bash
+    :linenos:
+
+    vtune -collect hpc-performance -result-dir vtune_hpc mpirun -np 4 ./lulesh2.0 -s 20
+
+After the program completes, analyze the profiling data with:
+
+..  code-block:: bash
+    :linenos:
+
+    vtune -report summary -result-dir vtune_hpc
+
+
+Memory Aceess
+-------------------
+
+..  code-block:: bash
+    :linenos:
+
+    vtune -collect memory-access -result-dir vtune_mem mpirun -np 4 ./lulesh2.0 -s 20
+
+
+
+GUI Analysis
+-------------------
+
+To see the analysis in a GUI, you can launch the VTune GUI with the following command:
+
+..  code-block:: bash
+    :linenos:
+
+    vtune-gui vtune_hotspots
 
 
 
