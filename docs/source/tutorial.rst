@@ -27,3 +27,4 @@ C/C++ programs.
     tutorial/intro.rst
     tutorial/gprof.rst
     tutorial/vtune.rst
+    tutorial/valgrind.rst
