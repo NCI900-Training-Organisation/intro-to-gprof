@@ -1,5 +1,4 @@
 Valgrind
-
 ==========================
 
 .. admonition:: Overview
@@ -16,16 +15,17 @@ Valgrind is a programming tool for memory debugging, memory leak detection, and 
 identify memory-related issues in their applications, such as memory leaks, uninitialized memory reads, and 
 invalid memory accesses. 
 
+First, start an interactive job on the cluster 
 
-Start an interactive job 
--------------------------
+
 
 ..  code-block:: bash
     :linenos:
 
     qsub -I -q normal -P vp91 -l walltime=02:00:00 -l ncpus=48 -l mem=192GB -l wd
 
-Load the gcc module
+
+and load the necessary modules.
 
 ..  code-block:: bash
     :linenos:
