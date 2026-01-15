@@ -218,6 +218,11 @@ Run Valgrind
 
     valgrind --leak-check=full --show-leak-kinds=all ./5_leaks_all
 
+
+* **--leak-check=full**: provides detailed information about each memory leak.
+
+* **--show-leak-kinds=all**: shows all types of leaks: definitely lost, indirectly lost, possibly lost, and still reachable.
+
 Sample output will be similar to:
 
 ..  code-block:: bash
