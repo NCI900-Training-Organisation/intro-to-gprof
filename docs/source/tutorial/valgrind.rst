@@ -42,7 +42,7 @@ Compile the code with debugging information
 ..  code-block:: bash
     :linenos:
 
-    cd /scratch/vp91/$USER/intro-to-gprof/code/valgrind
+    cd /scratch/vp91/$USER/intro-to-profiling/code/valgrind
     gcc -g -O0 1_leak.c -o 1_leak
 
 * `-g` enables debugging information.
@@ -95,7 +95,7 @@ Compile the code with debugging information
 ..  code-block:: bash
     :linenos:
 
-    cd /scratch/vp91/$USER/intro-to-gprof/code/valgrind
+    cd /scratch/vp91/$USER/intro-to-profiling/code/valgrind
 
     gcc -g -O0 2_indirect.c -o 2_indirect
 
@@ -131,7 +131,7 @@ Compile the code with debugging information
 ..  code-block:: bash
     :linenos:
 
-    cd /scratch/vp91/$USER/intro-to-gprof/code/valgrind
+    cd /scratch/vp91/$USER/intro-to-profiling/code/valgrind
 
     gcc -g -O0 3_possible.c -o 3_possible
 
@@ -169,7 +169,7 @@ Comnpile the code with debugging information
 ..  code-block:: bash
     :linenos:
 
-    cd /scratch/vp91/$USER/intro-to-gprof/code/valgrind
+    cd /scratch/vp91/$USER/intro-to-profiling/code/valgrind
 
     gcc -g -O0 4_still_reachable.c -o 4_still_reachable
 
@@ -206,7 +206,7 @@ To see more details about the leaks, rerun Valgrind with the `--leak-check=full`
 ..  code-block:: bash
     :linenos:
 
-    cd /scratch/vp91/$USER/intro-to-gprof/code/valgrind
+    cd /scratch/vp91/$USER/intro-to-profiling/code/valgrind
 
     gcc -g -O0 5_leaks_all.c -o 5_leaks_all
 

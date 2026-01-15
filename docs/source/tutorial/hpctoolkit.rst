@@ -45,7 +45,7 @@ To analyze the collected performance data, use the following command:
 ..  code-block:: bash
     :linenos:
 
-    hpcprof hpctoolkit-lulesh2.0-measurements-158325343.gadi-pbs
+    hpcprof <hpctoolkit-lulesh2.0-measurements-*>
 
 This will generate a performance database, `hpctoolkit-lulesh2.0-database-*`,  that can be viewed using the HPC Toolkit's visualization tools.
 

@@ -24,7 +24,7 @@ Build the LULESH application
     cd /scratch/vp91/$USER
     git clone https://github.com/LLNL/LULESH.git
 
-    cd /scratch/vp91/$USER/intro-to-gprof/build_scripts
+    cd /scratch/vp91/$USER/intro-to-profiling/build_scripts
     ./build_lulesh.sh /scratch/vp91/$USER/LULESH
 
 Test the LULESH application
