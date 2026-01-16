@@ -60,8 +60,8 @@ HPC Viewer
 
     hpcviewer <hpctoolkit-lulesh2.0-database-*>
 
-On Gadi this will usualy result in an error due to missing display. To get around this, launch a Virtsual Desktop session on Gadi and run the above 
-command inside that session.
+On Gadi this will usualy result in an error due to missing display. To get around this, launch a `Virtual Desktop  <https://handson-with-gadi.readthedocs.io/en/latest/tutorial/are_desktop.html>`_ session on Gadi and run the above 
+command in the terminal available on the Virtual Desktop. 
 
 Once launched you can explore the performance data using the various views and analysis tools provided by HPC Toolkit. 
 Look for hotspots, communication overheads, and other performance metrics to identify areas for optimization in your application.
